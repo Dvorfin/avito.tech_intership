@@ -1,0 +1,56 @@
+version: '3.5'
+services:
+  nginx:
+    build: ./nginx
+    container_name: nginx-web
+    ports:
+      - 80:80
+    depends_on: # зависит от приложения
+      - go-app
+    networks:
+      backend:
+        ipv4_address: 172.10.0.6
+
+  redis:
+    build: ./redis
+    container_name: redis-db
+    env_file:
+      - envfile.env
+#    environment:
+#      - REDIS_PASSWORD=avito
+#      - REDIS_TLS_PORT=6379
+ 
+    ports:
+      - 6379:6379
+    networks:
+      backend:
+        ipv4_address: 172.10.0.2
+
+
+
+  go-app: 
+    build: ./app
+    env_file:
+      - envfile.env
+#    environment:
+#      - WITH_UI=yes # env для запуска приложения с веб интерфейсом
+    ports:
+      - 8000:8080
+    depends_on: # зависит от редиса, т.е. запустится только после запуска редиса
+      - redis
+    container_name: go-web-app
+    networks:
+      backend:
+        ipv4_address: 172.10.0.4
+
+networks:
+  backend:
+    #driver: bridge
+    # external: true
+    driver: bridge
+    ipam:
+     # driver: bridge
+      config:
+       - subnet: 172.10.0.0/24
+         gateway: 172.10.0.1
+         

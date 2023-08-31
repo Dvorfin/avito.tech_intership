@@ -11,11 +11,32 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/spf13/viper"
+
 	"github.com/redis/go-redis/v9"
 )
 
-var addr string = "172.10.0.2:6379"
-var pass string = "avito"
+type Config struct {
+	Pass    string
+	Address string
+}
+
+func get_conf() Config {
+	viper.AddConfigPath("config")
+	viper.SetConfigName("config")
+	err := viper.ReadInConfig()
+	if err != nil {
+		log.Println(err)
+	}
+
+	password := viper.GetString("pass")
+	address := viper.GetString("address")
+
+	return Config{Pass: password, Address: address}
+}
+
+var addr string = get_conf().Pass
+var pass string = get_conf().Address
 
 type Response struct {
 	Key   string `json: "key"`

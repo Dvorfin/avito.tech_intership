@@ -13,7 +13,11 @@ import (
 	endpnts "gitgub.com/my/repo/endpoints"
 )
 
+var addr string = "172.10.0.2:6379"
+var pass string = "avito"
+
 func home_page(w http.ResponseWriter, r *http.Request) {
+
 	//fmt.Println(r.FormValue("key_get"))
 
 	// проверка, что переход только по разрешенным эндпоинтам

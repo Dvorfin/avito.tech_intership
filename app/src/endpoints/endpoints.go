@@ -16,9 +16,9 @@ import (
 	"github.com/redis/go-redis/v9"
 )
 
-type Config struct {
-	Pass    string
-	Address string
+type Config struct { // структура для конфига
+	Pass    string // пароль редиса
+	Address string // ip редиса
 }
 
 func get_conf() Config {
@@ -35,8 +35,8 @@ func get_conf() Config {
 	return Config{Pass: password, Address: address}
 }
 
-var addr string = get_conf().Pass
-var pass string = get_conf().Address
+var addr string = get_conf().Address // передача параметров из конфига
+var pass string = get_conf().Pass
 
 type Response struct {
 	Key   string `json: "key"`
